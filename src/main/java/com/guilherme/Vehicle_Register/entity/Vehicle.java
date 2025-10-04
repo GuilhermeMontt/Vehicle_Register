@@ -25,6 +25,8 @@ public class Vehicle {
     private String plate;
 
     private String model;
+
     private String manufacturer;
+    
     private int year;
 }

@@ -6,13 +6,14 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>3.5.6</version>
+    <version>3.3.1</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
-  <groupId>com.example</groupId>
-  <artifactId>demo</artifactId>
+  <groupId>com.guilherme</groupId>
+  <artifactId>Vehicle-Register</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>demo</name>
-  <description>Demo project for Spring Boot</description>
+  <name>Vehicle-Register</name>
+  <description>Vehicle Register project for Spring Boot</description>
   <url/>
   <licenses>
     <license/>

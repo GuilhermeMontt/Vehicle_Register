@@ -61,7 +61,7 @@ public class VehicleService {
 
             // Se o ano foi informado (e não é o valor padrão 0), adiciona uma condição de igualdade.
             if (filter.getYear() > 0) {
-                predicates.add(criteriaBuilder.equal(root.get("year"), filter.getYear()));
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("year"), filter.getYear()));
             }
 
             // Combina todos os predicados com "AND" e retorna a consulta final.

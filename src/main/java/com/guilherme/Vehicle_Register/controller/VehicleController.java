@@ -25,7 +25,6 @@ public class VehicleController {
     private final VehicleService vehicleService;
     private final KafkaTemplate<String, Vehicle> kafkaTemplate;
 
-    // O Controller agora também precisa do KafkaTemplate para publicar mensagens
     public VehicleController(VehicleService vehicleService, KafkaTemplate<String, Vehicle> kafkaTemplate){
         this.vehicleService = vehicleService;
         this.kafkaTemplate = kafkaTemplate;
@@ -49,14 +48,9 @@ public class VehicleController {
         return ResponseEntity.status(HttpStatus.OK).body(vehicleListFiltered);
     }
 
-    /**
-     * Endpoint para simular um produtor externo.
-     * Ele recebe os dados do veículo, valida o formato e envia para o tópico Kafka.
-     * A persistência será feita pelo consumidor de forma assíncrona.
-     */
     @PostMapping("/publish")
     public ResponseEntity<String> publishVehicle(@Valid @RequestBody Vehicle vehicle){
-        // Envia a mensagem para o Kafka. A chave é a placa, o valor é o objeto veículo.
+        // Envia para o kafka objeto recebido
         kafkaTemplate.send("vehicle-topic", vehicle.getPlate(), vehicle);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Veículo recebido e enviado para processamento.");
     }

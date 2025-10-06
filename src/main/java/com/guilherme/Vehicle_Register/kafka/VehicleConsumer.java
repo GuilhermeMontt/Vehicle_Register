@@ -22,10 +22,8 @@ public class VehicleConsumer {
     @KafkaListener(topics = "vehicle-topic", groupId = "vehicle-group")
     public void consume(Vehicle vehicle) {
         log.info("CONSUMER: Mensagem recebida do Kafka -> Veículo placa: {}", vehicle.getPlate());
-        // Aqui você poderia, por exemplo, chamar outro serviço para processar o seguro do veículo.
         log.info("CONSUMER: Mensagem recebida do Kafka -> Processando veículo placa: {}", vehicle.getPlate());
         try {
-            // A lógica de negócio (validação, processamento, etc) e persistência acontece aqui.
             vehicleService.createVehicle(vehicle);
             log.info("CONSUMER: Veículo placa {} salvo com sucesso no banco de dados.", vehicle.getPlate());
         } catch (DataIntegrityViolationException e) {

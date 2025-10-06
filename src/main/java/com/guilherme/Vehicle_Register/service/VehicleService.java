@@ -17,18 +17,15 @@ public class VehicleService {
 
     private final VehicleRepository vehicleRepository;
 
-    // Injeção de dependência via construtor (prática recomendada)
     public VehicleService(VehicleRepository vehicleRepository) {
         this.vehicleRepository = vehicleRepository;
     }
 
     public Vehicle createVehicle(Vehicle vehicle){
-        // O método save() retorna a entidade salva, incluindo o ID gerado.
         return vehicleRepository.save(vehicle);
     }
 
     public List<Vehicle> getAllVehicles() {
-        // O método findAll() é fornecido pelo JpaRepository e retorna todos os registros da tabela.
         try{
             return vehicleRepository.findAll();
         } catch(Exception e){
@@ -37,34 +34,30 @@ public class VehicleService {
     }
 
     public List<Vehicle> getFilteredVehicles(Vehicle filter) {
-        // A Specification é uma forma de construir consultas dinâmicas.
-        // (root, query, criteriaBuilder) -> são os três argumentos para construir a query.
         return vehicleRepository.findAll((Specification<Vehicle>) (root, query, criteriaBuilder) -> {
 
-            // Lista para armazenar as condições (predicados) do nosso filtro.
             List<Predicate> predicates = new ArrayList<>();
 
-            // Se a placa foi informada no filtro, adiciona uma condição "LIKE" para ela.
+            // Busca placa que possua sequencia de dígitos enviados no filtro
             if (filter.getPlate() != null && !filter.getPlate().isEmpty()) {
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("plate")), "%" + filter.getPlate().toLowerCase() + "%"));
             }
 
-            // Se o modelo foi informado, adiciona a condição para ele.
+            // Busca modelo que possua sequencia de dígitos enviados no filtro
             if (filter.getModel() != null && !filter.getModel().isEmpty()) {
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("model")), "%" + filter.getModel().toLowerCase() + "%"));
             }
 
-            // Se o fabricante foi informado, adiciona a condição para ele.
+            // Busca fabricante que possua sequencia de dígitos enviados no filtro
             if (filter.getManufacturer() != null && !filter.getManufacturer().isEmpty()) {
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("manufacturer")), "%" + filter.getManufacturer().toLowerCase() + "%"));
             }
 
-            // Se o ano foi informado (e não é o valor padrão 0), adiciona uma condição de igualdade.
+            // Busca carros que são do ano ou mais recentes que o filtro
             if (filter.getYear() > 0) {
                 predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("year"), filter.getYear()));
             }
 
-            // Combina todos os predicados com "AND" e retorna a consulta final.
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         });
     }

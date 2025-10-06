@@ -9,6 +9,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,13 +27,18 @@ public class Vehicle {
     private Long id;
 
     @NotBlank(message = "A placa não pode estar em branco.")
-    @Column(unique = true, nullable = false)
+    @Size(max = 10, message = "A placa deve ter no máximo 10 caracteres.")
+    @Column(unique = true, nullable = false, length = 10)
     private String plate;
 
     @NotBlank(message = "O modelo não pode estar em branco.")
+    @Size(max = 50, message = "O modelo deve ter no máximo 50 caracteres.")
+    @Column(length = 50)
     private String model;
 
     @NotBlank(message = "O fabricante não pode estar em branco.")
+    @Size(max = 50, message = "O fabricante deve ter no máximo 50 caracteres.")
+    @Column(length = 50)
     private String manufacturer;
     
     @NotNull(message = "O ano não pode ser nulo.")

@@ -1,38 +1,55 @@
+version: '3.8'
+
 services:
-  postgres:
-    image: 'postgres:16.3-alpine'
-    container_name: postgres-db
-    environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=vehicledb
+  # Serviço da Aplicação Spring Boot
+  app:
+    build: . # Constrói a imagem a partir do Dockerfile na raiz do projeto
+    container_name: vehicle_register_app
+    depends_on:
+      - postgres
+      - kafka
     ports:
-      - '5432:5432'
+      - "8080:8080" # Expõe a porta da aplicação para o host
+    environment:
+      # Garante que a aplicação espere o banco estar pronto
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+
+  # Serviço do Banco de Dados PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: vehicledb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432" # Expõe a porta do banco para debug (opcional)
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  # Serviço do Zookeeper (dependência do Kafka)
   zookeeper:
-    image: 'confluentinc/cp-zookeeper:7.5.3'
+    image: confluentinc/cp-zookeeper:7.5.0
     container_name: zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
 
+  # Serviço do Kafka
   kafka:
-    image: 'confluentinc/cp-kafka:7.5.3'
+    image: confluentinc/cp-kafka:7.5.0
     container_name: kafka
     depends_on:
       - zookeeper
     ports:
-      - '9092:9092'
+      - "9092:9092" # Expõe a porta do Kafka para o host
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
 
 volumes:
-  postgres_data:
+  postgres_data: # Volume para persistir os dados do PostgreSQL

@@ -25,16 +25,12 @@ Este projeto é um sistema de registro de veículos desenvolvido com Spring Boot
 
 Antes de começar, certifique-se de ter as seguintes ferramentas instaladas em sua máquina:
 
-*   [Java 21 (ou superior)](https://www.oracle.com/java/technologies/downloads/#java21)
-*   [Maven 3.8+](https://maven.apache.org/download.cgi)
 *   [Docker](https://www.docker.com/get-started)
 *   [Docker Compose](https://docs.docker.com/compose/install/)
 
 ## Passo a Passo para Rodar o Projeto
 
-Siga os passos abaixo para configurar e executar a aplicação localmente.
-
-### 1. Clone o Repositório
+### 1. Clone o Repositório (se ainda não o fez)
 
 Abra seu terminal e clone o projeto para a sua máquina.
 

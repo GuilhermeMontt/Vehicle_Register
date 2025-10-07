@@ -46,7 +46,6 @@ O projeto inclui um arquivo `docker-compose.yml` que sobe os contêineres necess
 Execute o seguinte comando na raiz do projeto:
 
 ```bash
-# O comando -d (detached) executa os contêineres em segundo plano.
 docker compose up --build
 ```
 
@@ -96,10 +95,3 @@ A aplicação estará disponível em `http://localhost:8080`.
     *   `year` (int)
 *   **Exemplo**: `http://localhost:8080/vehicles/filter?manufacturer=Volkswagen&year=1975`
 
-## Executando os Testes
-
-Para rodar a suíte de testes (unitários e de integração), execute o comando:
-
-```bash
-mvn test
-```

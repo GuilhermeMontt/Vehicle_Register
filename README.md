@@ -47,17 +47,17 @@ Execute o seguinte comando na raiz do projeto:
 
 ```bash
 # O comando -d (detached) executa os contêineres em segundo plano.
-docker-compose up -d
+docker compose up --build
 ```
 
 Aguarde alguns instantes para que os serviços sejam iniciados completamente.
 
-### 3. Execute a Aplicação Spring Boot
+### 3. Para Terminar Aplicação
 
-Com a infraestrutura rodando, você pode iniciar a aplicação Spring Boot usando o Maven.
+Basta digitar Ctrl + C no terminal e executar o seguinte comando para parar os containers:
 
 ```bash
-mvn spring-boot:run
+docker compose down
 ```
 
 A aplicação estará disponível em `http://localhost:8080`.
